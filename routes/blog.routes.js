@@ -6,10 +6,10 @@ const Blog = require('../models/Blog.model');
 // @route   '/api/blogs
 // @access  Private
 
-router.get('/blogs',(req,res) => 
+router.get('/blogs/',(req,res) => 
 {
-    
-        Blog.find({ user: req.payload._id })
+        
+        Blog.find({user: req.payload._id})
             .then(foundblogs => res.json(foundblogs))
         .catch(err => {
             console.log(err)
@@ -38,7 +38,7 @@ router.post('/blogs', (req, res, next) => {
 
 })
 
-router.delete("/blogs/:BlogId", (req, res)=>{
+router.delete("/blogs/:blogId", (req, res)=>{
     /* const { BlogId } = req.params; */
     
     Blog.findOneAndDelete({ _id: req.params.id, user: req.payload._id })
@@ -50,8 +50,7 @@ router.get("/blogs/:blogId", (req, res) => {
     /* const { blogId } = req.params; */
 
     Blog.findOne({ _id: req.params.id, user: req.payload._id })
-            .populate('tasks')
-            .then(foundProject => res.json(foundProject))
+            .then(foundBlog => res.json(foundBlog))
             .catch(err => console.log(err))
 })
 module.exports = router;
