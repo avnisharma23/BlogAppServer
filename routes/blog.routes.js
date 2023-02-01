@@ -1,17 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const Blog = require('../models/Blog.model');
-
+const mongoose = require('mongoose');
 // @desc    Get all blogs by user id
 // @route   '/api/blogs
 // @access  Private
 
 router.get('/blogs/',(req,res) => 
 {
-        
-        Blog.find({user: req.payload._id})
-            .then(foundblogs => res.json(foundblogs))
-        .catch(err => {
+    Blog.find({user: req.payload._id})
+       .then(foundblogs => res.json(foundblogs))
+       .catch(err => {
             console.log(err)
             res.json(err)
         })
@@ -20,37 +19,65 @@ router.get('/blogs/',(req,res) =>
 
 //  POST /api/blogs  -  Creates a new blog
 router.post('/blogs', (req, res, next) => {
-    const { title, content } = req.body;
+
+        const { title, content } = req.body;
+    // Check if title or content are provided as empty string
+        if (title === "" || content === "") {
+            res.status(400).json({ message: "Provide Title and Content." });
+            return;
+        }
    
     Blog.create({ title, content, user:req.payload._id })
-      .then(response => res.json(response))
+      .then((response) => {
+        res.status(200).json({message : 'Blog Created Successfully.'})
+        //res.json(response)
+    }
+    
+      )
       .catch(err => res.json(err));
   });
   
-
+// PUT  /api/blogs/:blogId - Edit specified blog
   router.put("/blogs/:blogId", (req, res)=>{
     
+    const { blogId } = req.params;
     const { title, content } = req.body;
-    
-    Blog.findOneAndUpdate({ _id: req.params.id, user: req.payload._id }, { title, content }, { new: true })
-            .then(updatedBlog => res.json(updatedBlog))
+
+    console.log("Updated record",req.body);
+    // Check if title or content are provided as empty string
+    if (title === "" || content === "") {
+        res.status(400).json({ message: "Provide Title and Content." });
+        return;
+    }
+    Blog.findByIdAndUpdate(blogId , { title, content }, { new: true })
+            .then((updatedBlog) => { 
+                res.status(200).json({message: 'Blog Updated Successfully.'})
+            })
             .catch(err => console.log(err))
 
 })
 
 router.delete("/blogs/:blogId", (req, res)=>{
-    /* const { BlogId } = req.params; */
+    const { blogId } = req.params; 
     
-    Blog.findOneAndDelete({ _id: req.params.id, user: req.payload._id })
-            .then(deletedBlog => res.json(deletedBlog))
-            .catch(err => console.log(err))
+    Blog.findByIdAndDelete(blogId)
+        .then((deletedBlog) => {
+            res.status(200).json({message: 'Blog Deleted Successfully.'})
+        })
+    .catch(err => console.log(err))
 })
 
 router.get("/blogs/:blogId", (req, res) => {
-    /* const { blogId } = req.params; */
+     const { blogId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(blogId)) {
+        res.status(400).json({ message: 'Specified id is not valid' });
+        return;
+      }
 
-    Blog.findOne({ _id: req.params.id, user: req.payload._id })
-            .then(foundBlog => res.json(foundBlog))
-            .catch(err => console.log(err))
+    Blog.findById( blogId )
+        .then((foundBlog) => { 
+            res.json(foundBlog)
+        })
+        .catch(err => console.log(err))
 })
 module.exports = router;

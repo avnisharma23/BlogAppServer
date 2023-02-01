@@ -22,7 +22,7 @@ router.post("/signup", (req, res, next) => {
 
   // Check if email or password or name are provided as empty strings
   if (firstName === "" || lastName === "" || email === "" || password === "" ) {
-    res.status(400).json({ message: "Provide email, password and name" });
+    res.status(400).json({ message: "Provide First Name,Last Name,Email and Password." });
     return;
   }
 

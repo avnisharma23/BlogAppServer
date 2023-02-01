@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const BlogSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
+        required: [true,'Title is required.']
     },
     content: {
         type: String,
-        required: true,
+        required: [true,'Content is required.']
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
