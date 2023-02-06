@@ -9,7 +9,8 @@ In Blog App , User can signup and create Blog. User have faciltiy to update and 
 -  **Create Blog:** As a user I can create an Blog.
 -  **Update Blog:** As a user I can update my Blog.
 -  **Delete Blog:** As a user I can delete my Blog.
--  **Blog List:** As a user I can see my Blog list.
+-  **Blog List:** Looged in User have right to see  Blog list.
+-  **Comment:** Logged in User commnet on any blogs.
 
 
 <br>
@@ -31,6 +32,7 @@ Page                                        |
 ## Components
 - BlogCard
 - NavBar
+- Comment Card
 
 ## Backlog
 
@@ -44,9 +46,15 @@ Page                                        |
   - authenticateUser
 
   ## Theme
-    - Theme - theme.js : 
-  
-<br>
+    - Theme - theme.js :
+
+
+ ## Models 
+     - UserModel
+     - BlogModel
+     - CommentModel
+             
+  <br>
 
 
 ## API Endpoints (backend routes)
@@ -60,8 +68,8 @@ Page                                        |
 | POST        | `/auth/login`                 | 
 | POST        | `/auth/logout`                | 
 | GET        | `/auth/verify`                | 
-| 
-
+| POST        | `/api/comment`                | 
+| GET        | `/auth/verify`                | 
 
 <br>
 
